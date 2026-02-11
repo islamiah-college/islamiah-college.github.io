@@ -125,42 +125,95 @@
         <h2>Online Examination Links</h2>
     </header>
 
-    <div class="links-container">
-        <p class="instruction">Click on the respective subject to open the exam portal.</p>
-<!--
-        <a href="https://forms.gle/dnznc4WhgmJxCaQD9" class="exam-link" target="_blank">
-            <span class="exam-name">Environment Studies - BBA & BCOM</span>
-            <span class="status-tag">Live</span>
-        </a>
+   <div class="links-container">
+    <p class="instruction">Exam links appear automatically at start time and remain active for 1 hour.</p>
 
-        <a href="https://forms.gle/7oEDk6GVc7ALxfor5" class="exam-link" target="_blank">
-            <span class="exam-name">Environment Studies - B.Sc(BIOCHEMISTRY), B.Sc(BIOTECH), B.Sc(CHEMISTRY) </span>
-            <span class="status-tag">Live</span>
-        </a>
+    <a href="https://forms.gle/dnznc4WhgmJxCaQD9" id="exam1" class="exam-link" target="_blank">
+        <span class="exam-name">Environment Studies - BBA & BCOM</span>
+        <span class="status-tag" id="status1">Checking...</span>
+    </a>
 
-        <a href="https://forms.gle/UKtuLjSD8iWbmfhY8" class="exam-link" target="_blank">
-            <span class="exam-name">BCA & B.Sc.,(CS) </span>
-            <span class="status-tag">Live</span>
-        </a>
-        
-        <a href="https://forms.gle/AhPEpV1Qo7DAazvR6" class="exam-link" target="_blank">
-            <span class="exam-name"> ALL PG STUDENTS  </span>
-            <span class="status-tag">Live</span>
-           
-        </a>
-        <a href="https://forms.gle/92sKB8e5jqPd73Cs6" class="exam-link" target="_blank">
-            <span class="exam-name">B.Sc.,(PHYSICS) & B.Sc.,(DATA SCIENCE)  </span>
-            <span class="status-tag">Live</span>
-           
-        </a> 
-        </div>
-       -->
+    <a href="https://forms.gle/7oEDk6GVc7ALxfor5" id="exam2" class="exam-link" target="_blank">
+        <span class="exam-name">Environment Studies - B.Sc(BIOCHEM), BIOTECH, CHEM</span>
+        <span class="status-tag" id="status2">Checking...</span>
+    </a>
+
+    <a href="https://forms.gle/UKtuLjSD8iWbmfhY8" id="exam3" class="exam-link" target="_blank">
+        <span class="exam-name">BCA & B.Sc.,(CS)</span>
+        <span class="status-tag" id="status3">Checking...</span>
+    </a>
+
+    <a href="https://forms.gle/AhPEpV1Qo7DAazvR6" id="exam4" class="exam-link" target="_blank">
+        <span class="exam-name">ALL PG STUDENTS</span>
+        <span class="status-tag" id="status4">Checking...</span>
+    </a>
+
+    <a href="https://forms.gle/92sKB8e5jqPd73Cs6" id="exam5" class="exam-link" target="_blank">
+        <span class="exam-name">B.Sc.,(PHYSICS) & B.Sc.,(DATA SCIENCE)</span>
+        <span class="status-tag" id="status5">Checking...</span>
+    </a>
+</div>
+
+<script>
+// CONFIGURATION: Set your exam start times here
+// Format: Date(Year, Month[0-11], Day, Hour[24hr], Minute)
+const examSchedule = [
+    { id: "exam1", statusId: "status1", start: new Date(2026, 1, 11, 10, 0) }, // Feb 10, 10:00 AM
+    { id: "exam2", statusId: "status2", start: new Date(2026, 1, 11, 11,0) }, // Feb 10, 11:0 AM
+    { id: "exam3", statusId: "status3", start: new Date(2026, 1, 11, 12, 0) }, // Feb 10, 2:00 PM
+    { id: "exam4", statusId: "status4", start: new Date(2026, 1, 11, 11, 0) }, // Feb 11, 10:00 AM
+    { id: "exam5", statusId: "status5", start: new Date(2026, 1, 10, 17, 0) }  // Feb 11, 11:00 AM
+];
+
+function updateExams() {
+    const now = new Date();
+    const oneHour = 60 * 60 * 1000; // 1 hour in milliseconds
+
+    examSchedule.forEach(exam => {
+        const linkElement = document.getElementById(exam.id);
+        const statusElement = document.getElementById(exam.statusId);
+        const startTime = exam.start.getTime();
+        const endTime = startTime + oneHour;
+        const currentTime = now.getTime();
+
+        if (currentTime < startTime) {
+            // UPCOMING
+            statusElement.innerText = "Upcoming";
+            statusElement.style.background = "#8892b0"; // Grey
+            linkElement.style.pointerEvents = "none"; // Disable clicking
+            linkElement.style.opacity = "0.6";
+        } 
+        else if (currentTime >= startTime && currentTime < endTime) {
+            // LIVE
+            statusElement.innerText = "Live";
+            statusElement.style.background = "#64ffda"; // Green
+            statusElement.style.color = "#0a192f";
+            linkElement.style.pointerEvents = "auto";
+            linkElement.style.opacity = "1";
+            linkElement.style.display = "flex";
+        } 
+        else {
+            // CLOSED
+            statusElement.innerText = "Closed";
+            statusElement.style.background = "#ff4d4d"; // Red
+            statusElement.style.color = "white";
+            linkElement.style.pointerEvents = "none";
+            linkElement.style.display = "none"; // Hide the link entirely
+        }
+    });
+}
+
+// Check every second to keep the UI snappy
+setInterval(updateExams, 1000);
+updateExams();
+
+// Force page refresh every 30 minutes to stay synced with server time
+setTimeout(() => { location.reload(); }, 1800000);
+</script>
 
     <footer>
         &copy; 2026 Islamiah College (Autonomous), Vaniyambadi. All rights reserved.
     </footer>
 
 </body>
-
 </html>
-
